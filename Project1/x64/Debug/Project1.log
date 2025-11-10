@@ -1,39 +1,39 @@
 ﻿  main.cpp
-C:\Users\Lev\Downloads\Project1\LexisMachine.h(233,55): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+C:\arithmetic_expression_lab3\LexisMachine.h(233,55): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "main.cpp")
   
-C:\Users\Lev\Downloads\Project1\LexisMachine.h(242,16): warning C4267: аргумент: преобразование из "size_t" в "const T"; возможна потеря данных
-C:\Users\Lev\Downloads\Project1\LexisMachine.h(242,16): warning C4267:         with
-C:\Users\Lev\Downloads\Project1\LexisMachine.h(242,16): warning C4267:         [
-C:\Users\Lev\Downloads\Project1\LexisMachine.h(242,16): warning C4267:             T=int
-C:\Users\Lev\Downloads\Project1\LexisMachine.h(242,16): warning C4267:         ]
+C:\arithmetic_expression_lab3\LexisMachine.h(242,16): warning C4267: аргумент: преобразование из "size_t" в "const T"; возможна потеря данных
+C:\arithmetic_expression_lab3\LexisMachine.h(242,16): warning C4267:         with
+C:\arithmetic_expression_lab3\LexisMachine.h(242,16): warning C4267:         [
+C:\arithmetic_expression_lab3\LexisMachine.h(242,16): warning C4267:             T=int
+C:\arithmetic_expression_lab3\LexisMachine.h(242,16): warning C4267:         ]
   (компиляция исходного файла "main.cpp")
   
-C:\Users\Lev\Downloads\Project1\Validator.h(27,18): warning C4267: аргумент: преобразование из "size_t" в "const T"; возможна потеря данных
-C:\Users\Lev\Downloads\Project1\Validator.h(27,18): warning C4267:         with
-C:\Users\Lev\Downloads\Project1\Validator.h(27,18): warning C4267:         [
-C:\Users\Lev\Downloads\Project1\Validator.h(27,18): warning C4267:             T=int
-C:\Users\Lev\Downloads\Project1\Validator.h(27,18): warning C4267:         ]
+C:\arithmetic_expression_lab3\Validator.h(28,18): warning C4267: аргумент: преобразование из "size_t" в "const T"; возможна потеря данных
+C:\arithmetic_expression_lab3\Validator.h(28,18): warning C4267:         with
+C:\arithmetic_expression_lab3\Validator.h(28,18): warning C4267:         [
+C:\arithmetic_expression_lab3\Validator.h(28,18): warning C4267:             T=int
+C:\arithmetic_expression_lab3\Validator.h(28,18): warning C4267:         ]
   (компиляция исходного файла "main.cpp")
   
-C:\Users\Lev\Downloads\Project1\Validator.h(35,19): warning C4267: аргумент: преобразование из "size_t" в "const T"; возможна потеря данных
-C:\Users\Lev\Downloads\Project1\Validator.h(35,19): warning C4267:         with
-C:\Users\Lev\Downloads\Project1\Validator.h(35,19): warning C4267:         [
-C:\Users\Lev\Downloads\Project1\Validator.h(35,19): warning C4267:             T=int
-C:\Users\Lev\Downloads\Project1\Validator.h(35,19): warning C4267:         ]
+C:\arithmetic_expression_lab3\Validator.h(36,19): warning C4267: аргумент: преобразование из "size_t" в "const T"; возможна потеря данных
+C:\arithmetic_expression_lab3\Validator.h(36,19): warning C4267:         with
+C:\arithmetic_expression_lab3\Validator.h(36,19): warning C4267:         [
+C:\arithmetic_expression_lab3\Validator.h(36,19): warning C4267:             T=int
+C:\arithmetic_expression_lab3\Validator.h(36,19): warning C4267:         ]
   (компиляция исходного файла "main.cpp")
   
-C:\Users\Lev\Downloads\Project1\TQueue.h(26,45): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\arithmetic_expression_lab3\TQueue.h(26,45): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "main.cpp")
-      C:\Users\Lev\Downloads\Project1\TQueue.h(26,45):
+      C:\arithmetic_expression_lab3\TQueue.h(26,45):
       контекст создания экземпляра шаблона (сначала самый старый)
-          C:\Users\Lev\Downloads\Project1\LexisMachine.h(63,16):
+          C:\arithmetic_expression_lab3\LexisMachine.h(63,16):
           выполняется компиляция ссылки на экземпляр класс шаблон функции "TQueue<Lexem>"
-          C:\Users\Lev\Downloads\Project1\TQueue.h(26,2):
+          C:\arithmetic_expression_lab3\TQueue.h(26,2):
           во время компиляции функции-члена класс шаблон "TQueue<Lexem>::TQueue(size_t)"
-              C:\Users\Lev\Downloads\Project1\LexisMachine.h(117,2):
+              C:\arithmetic_expression_lab3\LexisMachine.h(117,2):
               см. первую ссылку на "TQueue<Lexem>::TQueue" в "LexisMachine::LexisMachine"
   
-C:\Users\Lev\Downloads\Project1\TQueue.h(56,1): warning C4715: TQueue<Lexem>::operator=: значение возвращается не при всех путях выполнения
-C:\Users\Lev\Downloads\Project1\TStack.h(50,1): warning C4715: TStack<int>::operator=: значение возвращается не при всех путях выполнения
-  Project1.vcxproj -> C:\Users\Lev\Downloads\Project1\x64\Debug\Project1.exe
+C:\arithmetic_expression_lab3\TQueue.h(56,1): warning C4715: TQueue<Lexem>::operator=: значение возвращается не при всех путях выполнения
+C:\arithmetic_expression_lab3\TStack.h(50,1): warning C4715: TStack<int>::operator=: значение возвращается не при всех путях выполнения
+  Project1.vcxproj -> C:\arithmetic_expression_lab3\x64\Debug\Project1.exe

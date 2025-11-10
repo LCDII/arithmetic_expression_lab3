@@ -2,7 +2,7 @@
 
 #include"LexisMachine.h"
 #include"SyntaxisMachine.h"
-
+#include"PostfixConverter.h"
 
 
 
@@ -11,6 +11,7 @@ class Validator
 {
 	LexisMachine lexisMachine;
 	SyntaxisMachine syntaxisMachine;
+	PostfixConverter postfixConverter;
 	string in;
 	TStack<int> errors;
 
@@ -54,6 +55,8 @@ class Validator
         syntaxisMachine.validate();
 
         errors = errors + syntaxisMachine.getErrors();
+
+
     }
 public:
     Validator(const string& _in) /*: in(_in), lexisMachine(LexisMachine(in)), syntaxisMachine(lexisMachine.getOut())*/
@@ -62,16 +65,21 @@ public:
         lexisMachine = LexisMachine(in);
     }
 
-    TQueue<Lexem> getValidatedOut()
-    {
-        validate();
-        if (errors.isEmpty())
-            return syntaxisMachine.getOut();
-        else
-        {
-            cout << errors << endl;
-            throw - 1;
-        }
-		
-    }
+	TQueue<Lexem> getValidatedOut()
+	{
+		validate();
+		if (errors.isEmpty())
+		{
+			postfixConverter = PostfixConverter(syntaxisMachine.getOut());
+			postfixConverter.convert();
+			return postfixConverter.getOut();
+		}
+		else
+		{
+			cout << errors << endl;
+			throw - 1;
+		}
+
+	}
+
 };

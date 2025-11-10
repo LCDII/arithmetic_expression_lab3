@@ -56,7 +56,7 @@ TStack<T> operator+(const TStack<T>& s1, const TStack<T>& s2) {
 
 class LexisMachine : public IFinalStateMachine
 {
-	using Func = void (IFinalStateMachine::*)(int);
+	using Func = void (LexisMachine::*)(int);
 	Func** call;
 
 
@@ -102,10 +102,10 @@ class LexisMachine : public IFinalStateMachine
 	{
 		switch (c)
 		{
-		case'+':case'-':case'*':case'/':case'(':case')':
-			return 0;
 		case'0':case'1':case'2':case'3':case'4':case'5':case'6':case'7':case'8':case'9':
 			return 1;
+		case'+':case'-':case'*':case'/':case'(':case')':
+			return 0;
 
 		}
 		throw"not in Alphabet";
@@ -137,10 +137,10 @@ public:
 			call[i] = new Func[2];
 		}
 		
-		call[0][0] = static_cast<Func>(&LexisMachine::pushOperator);
-		call[0][1] = static_cast<Func>(&LexisMachine::setValue);
-		call[1][0] = static_cast<Func>(&LexisMachine::pushValueAndOperator);
-		call[1][1] = static_cast<Func>(&LexisMachine::increaseValue);
+		call[0][0] = &LexisMachine::pushOperator;
+		call[0][1] = &LexisMachine::setValue;
+		call[1][0] = &LexisMachine::pushValueAndOperator;
+		call[1][1] = &LexisMachine::increaseValue;
 
 		next[0][0] = 0;
 		next[0][1] = 1;
@@ -215,7 +215,7 @@ public:
 		delete[] call;
 	}
 
-	TQueue<Lexem>& getOut()
+	TQueue<Lexem> getOut()
 	{
 		return out;
 	}
@@ -241,7 +241,7 @@ public:
 				TStack<int>error;
 				error.push(i);
 				errors = errors + error;
-				
+				//cout << errors;
 			}
 		}
 		cout << "Done"<<endl;

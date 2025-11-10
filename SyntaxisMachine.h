@@ -15,23 +15,22 @@ class SyntaxisMachine : public IFinalStateMachine
 {
 	TQueue<Lexem> in;
 	TQueue<Lexem> out;
-	using Func = void (IFinalStateMachine::*)(Lexem&);
+	using Func = void (SyntaxisMachine::*)(Lexem&);
 	Func** call;
 
 	TStack<int> errors;
 	int errorIndex;
 	int findTransitionColumn(Lexem lex)
 	{
-		if (char(lex.getValue()) == ')')
+		if (lex.IsNum())
+			return 3;
+		else if (char(lex.getValue()) == ')')
 			return 1;
 		else if (char(lex.getValue()) == '(')
 			return 0;
-		else if (lex.IsNum())
-			return 3;
 		else
 			return 2;
-
-	}
+	}//проверка
 
 	/*
 		q0 = начало строки или (
@@ -40,11 +39,7 @@ class SyntaxisMachine : public IFinalStateMachine
 	*/
 	
 	/*
-			| (  | )  | /*+- | num |
-		0	| f3 | f8 |  f2  | f4  |
-		1	| f7 | f5 |  f1  | f9  |
-		2	| f3 | f8 |  f6  | f4  |
-	*/
+		
 	/*
 			| (  | )  | /*+- | num |
 		0	| f1 | f5 |  f2  | f1  |
@@ -104,7 +99,7 @@ class SyntaxisMachine : public IFinalStateMachine
 
 
 public:
-	SyntaxisMachine()
+	SyntaxisMachine() : IFinalStateMachine()
 	{
 		next = new int* [3];
 		call = new Func * [3];
@@ -178,10 +173,10 @@ public:
 		delete[] next;
 		delete[] call;
 	}
-	SyntaxisMachine(TQueue<Lexem>& _in) : in(_in)
+	SyntaxisMachine(TQueue<Lexem> _in) : in(_in)
 	{
 		TQueue<Lexem>_(in);
-		int outSize = 0;
+		int outSize = 1;
 		while (!_.isEmpty())
 		{
 			outSize++;
@@ -232,24 +227,24 @@ public:
 		2	| f1 | f5 |  f3  | f1  |
 		*/
 
-		call[0][0] = static_cast<Func>(&SyntaxisMachine::PushLexem);
-		call[0][1] = static_cast<Func>(&SyntaxisMachine::pushCloseBracketExcept);
-		call[0][2] = static_cast<Func>(&SyntaxisMachine::pushOperatorUn);
-		call[0][3] = static_cast<Func>(&SyntaxisMachine::PushLexem);
-		call[1][0] = static_cast<Func>(&SyntaxisMachine::pushOpenBracketExcept);
-		call[1][1] = static_cast<Func>(&SyntaxisMachine::PushLexem);
-		call[1][2] = static_cast<Func>(&SyntaxisMachine::PushLexem);
-		call[1][3] = static_cast<Func>(&SyntaxisMachine::pushNumberExcept);
-		call[2][0] = static_cast<Func>(&SyntaxisMachine::PushLexem);
-		call[2][1] = static_cast<Func>(&SyntaxisMachine::pushCloseBracketExcept);
-		call[2][2] = static_cast<Func>(&SyntaxisMachine::pushOperatorExcept);
-		call[2][3] = static_cast<Func>(&SyntaxisMachine::PushLexem);
+		call[0][0] = &SyntaxisMachine::PushLexem;
+		call[0][1] = &SyntaxisMachine::pushCloseBracketExcept;
+		call[0][2] = &SyntaxisMachine::pushOperatorUn;
+		call[0][3] = &SyntaxisMachine::PushLexem;
+		call[1][0] = &SyntaxisMachine::pushOpenBracketExcept;
+		call[1][1] = &SyntaxisMachine::PushLexem;
+		call[1][2] = &SyntaxisMachine::PushLexem;
+		call[1][3] = &SyntaxisMachine::pushNumberExcept;
+		call[2][0] = &SyntaxisMachine::PushLexem;
+		call[2][1] = &SyntaxisMachine::pushCloseBracketExcept;
+		call[2][2] = &SyntaxisMachine::pushOperatorExcept;
+		call[2][3] = &SyntaxisMachine::PushLexem;
 	}
-	void setIn(TQueue<Lexem>&_in)
+	void setIn(TQueue<Lexem>_in)
 	{
 		in = _in;
 	}
-	TQueue<Lexem>& getOut()
+	TQueue<Lexem> getOut()
 	{
 		return out;
 	}
@@ -259,6 +254,7 @@ public:
 		while (!in.isEmpty())
 		{
 			Lexem item = in.pop();
+			
 			(this->*call[state][findTransitionColumn(item)])(item);
 			state = next[state][findTransitionColumn(item)];
 		}
