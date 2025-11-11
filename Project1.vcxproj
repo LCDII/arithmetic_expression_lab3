@@ -128,6 +128,7 @@
     <ClInclude Include="Lexem.h" />
     <ClInclude Include="LexisMachine.h" />
     <ClInclude Include="PostfixConverter.h" />
+    <ClInclude Include="Solver.h" />
     <ClInclude Include="SyntaxisMachine.h" />
     <ClInclude Include="TQueue.h" />
     <ClInclude Include="TStack.h" />

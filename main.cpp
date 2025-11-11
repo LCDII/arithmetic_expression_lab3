@@ -6,7 +6,7 @@
 
 int main()
 {
-	string s = "(40*(-15+30)/15)-1";
+	string s = "13+7(12+1)-3+18+(1)-(-1)";
 	/*LexisMachine lexm(s);
 	lexm.validate();
 	TQueue<Lexem>_(lexm.getOut());
@@ -28,12 +28,15 @@ int main()
 	ArithmeticExpression ae(s);
 	ae.setValidator(validator);
 	ae.validate();
-	
 	cout << endl;
+
+	cout << ae.getOut();
+	
+	/*cout << endl;
 	TQueue<Lexem>_(ae.getOut());
 	while (!_.isEmpty())
 	{
 		cout << _.pop();
 	}
-	cout << endl;
+	cout << endl;*/
 }

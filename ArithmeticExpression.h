@@ -8,6 +8,7 @@ class ArithmeticExpression
 	Validator* validator;
 	TQueue<Lexem> infix;
 	TQueue<Lexem> postfix;
+	int answer;
 public:
 	ArithmeticExpression(string& _n) : in(_n)
 	{
@@ -21,16 +22,17 @@ public:
 	{
 		try
 		{
-			postfix = validator->getValidatedOut();
+			answer = validator->getValidatedOut();
 			cout << "Done";
 		}
 		catch (...)
 		{
 			cout << "Error";
+			exit(0);
 		}
 	}
-	TQueue<Lexem>& getOut()
+	int getOut()
 	{
-		return postfix;
+		return answer;
 	}
 };

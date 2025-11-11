@@ -3,7 +3,7 @@
 #include"LexisMachine.h"
 #include"SyntaxisMachine.h"
 #include"PostfixConverter.h"
-
+#include"Solver.h"
 
 
 
@@ -12,6 +12,7 @@ class Validator
 	LexisMachine lexisMachine;
 	SyntaxisMachine syntaxisMachine;
 	PostfixConverter postfixConverter;
+	Solver solver;
 	string in;
 	TStack<int> errors;
 
@@ -65,14 +66,16 @@ public:
         lexisMachine = LexisMachine(in);
     }
 
-	TQueue<Lexem> getValidatedOut()
+	int getValidatedOut()
 	{
 		validate();
 		if (errors.isEmpty())
 		{
 			postfixConverter = PostfixConverter(syntaxisMachine.getOut());
 			postfixConverter.convert();
-			return postfixConverter.getOut();
+			solver = Solver(postfixConverter.getOut());
+			solver.Solve();
+			return solver.getOut();
 		}
 		else
 		{
