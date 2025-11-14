@@ -10,6 +10,7 @@ ArithmeticExpression::ArithmeticExpression(string _in) : in(_in)
 	if (in.size() < 1)
 		throw "Arithmetics Expression cannot be empty";
 	//or we can just set in as 0
+	
 	solver = FSolver::getSolver(this);
 
 	try

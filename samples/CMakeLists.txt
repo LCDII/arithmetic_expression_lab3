@@ -5,4 +5,4 @@ file(GLOB srcs "*.cpp")
 
 add_executable(${target} ${srcs} ${hdrs} )
 
-target_link_libraries(${target} ${LIIBRARY})
+target_link_libraries(${target} ${LIBRARY})

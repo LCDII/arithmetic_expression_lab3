@@ -12,7 +12,7 @@ set(TESTS   "test_${PROJECT_NAME}")
 
 include_directories(${INCLUDE} gtest)
 
-add_subdirectory(samples)
 add_subdirectory(src)
+add_subdirectory(samples)
 add_subdirectory(gtest)
 add_subdirectory(test)
