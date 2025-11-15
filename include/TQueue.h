@@ -25,7 +25,7 @@ public:
 
 	TQueue(size_t _sz = 2) : sz(_sz + 1), s(0), f(sz - 1)
 	{
-		if (_sz == 0 || _sz > MAX_QUEUE_SIZE)
+		if (_sz < 2 || _sz > MAX_QUEUE_SIZE)
 			throw "Queue size should be greater than zero and less than max";
 		mem = new T[sz];
 	}
@@ -77,7 +77,12 @@ public:
 		f = next(f);
 		mem[f] = val;
 	}
-
+	const T top()
+	{
+		if(isEmpty())
+			throw "There's nothing to top from queue";
+		return mem[s];
+	}
 	const T pop()
 	{
 		if (isEmpty())
@@ -88,6 +93,29 @@ public:
 	}
 
 
+	bool operator==(const TQueue<T>& q)
+	{
+		if (this == &q) return true;
+		if (this->sz != q.sz) {
+			return false;
+		}
+
+		// Создаем копии для сравнения (очередь нельзя обходить без извлечения)
+		TQueue<T> _q1 = *this;
+		TQueue<T> _q2 = q;
+
+		while (!_q1.isEmpty()) {
+			if (_q1.top() != _q2.top()) {
+				return false;
+			}
+			_q1.pop();
+			_q2.pop();
+		}
+		return true;
+	}
+	bool operator!=(const TQueue<T>& q) {
+		return !(*this == q);
+	}
 };
 
 #endif

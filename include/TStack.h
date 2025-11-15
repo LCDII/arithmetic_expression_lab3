@@ -19,7 +19,7 @@ protected:
 public:
     TStack(size_t _sz = 1) : curr(-1)
     {
-        if (_sz == 0 || _sz > MAX_STACK_SIZE)
+        if (_sz < 1 || _sz > MAX_STACK_SIZE)
             throw out_of_range("Stack size should be greater than zero and less than max");
         sz = _sz;
         mem = new T[sz];
@@ -83,6 +83,7 @@ public:
         return mem[curr];
     }
 
+  
 
     friend ostream& operator<<(ostream& ostr, TStack& st)
     {
