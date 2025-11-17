@@ -2,6 +2,7 @@
 #include"FSolver.h"
 #include"ISolver.h"
 #include"Exceptions.h"
+
 using namespace std;
 
 
@@ -126,3 +127,31 @@ ArithmeticExpression ArithmeticExpression::operator/(const ArithmeticExpression&
 	return *this / to_string(ae.answer);
 }
 
+
+
+
+ArithmeticExpression ArithmeticExpression::operator+(const int& i)
+{
+	return *this + to_string(i);
+}
+ArithmeticExpression ArithmeticExpression::operator-(const int& i)
+{
+	return *this - to_string(i);
+}
+ArithmeticExpression ArithmeticExpression::operator*(const int& i)
+{
+	return *this * to_string(i);
+}
+ArithmeticExpression ArithmeticExpression::operator/(const int& i)
+{
+	return *this / to_string(i);
+}
+
+
+ostream& operator<<(ostream& ostr, ArithmeticExpression ae)
+{
+	ostr << "Инфиксная запись: " << ae.infix;
+	ostr << "Постфиксная запись: " << ae.postfix;
+	ostr << "Ответ: " << ae.answer << endl;
+	return ostr;
+}

@@ -116,6 +116,19 @@ public:
 	bool operator!=(const TQueue<T>& q) {
 		return !(*this == q);
 	}
+
+
+
+	friend ostream& operator<<(ostream& ostr, TQueue<T> q)
+	{
+		TQueue<T> tmp(q);
+		while (!tmp.isEmpty())
+		{
+			ostr << tmp.pop();
+		}
+		ostr << endl;
+		return ostr;
+	}
 };
 
 #endif

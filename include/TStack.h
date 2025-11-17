@@ -83,6 +83,11 @@ public:
         return mem[curr];
     }
 
+    void clear()
+    {
+        while (!isEmpty())
+            pop();
+    }
   
 
     friend ostream& operator<<(ostream& ostr, TStack& st)
@@ -91,9 +96,9 @@ public:
             return ostr;
         for (size_t i = 0; i <= st.curr; i++)
         {
-            cout << st.mem[i] << " ";
+            ostr << st.mem[i] << " ";
         }
-        cout << endl;
+        ostr << endl;
         return ostr;
     }
 

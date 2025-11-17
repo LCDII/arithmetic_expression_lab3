@@ -9,7 +9,6 @@ class ISolver;
 class AnswerGiver : public Handler 
 {
 	TQueue<Lexem> in;
-	int out;
 public:
 	AnswerGiver();
 	AnswerGiver(Handler* _handler);

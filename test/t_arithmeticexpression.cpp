@@ -35,5 +35,103 @@ TEST(ArithmeticExpression, can_create_copy_of_expression)
 {
 	string s = "54+76";
 	ArithmeticExpression ae(s);
+	ArithmeticExpression a(ae);
 	ASSERT_NO_THROW(ArithmeticExpression a(ae));
+}
+
+
+
+
+TEST(ArithmeticExpression, can_add_expressions)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "32";
+	ArithmeticExpression ae1(s1);
+	EXPECT_EQ((ae + ae1).getAnswer(), 162);
+}
+TEST(ArithmeticExpression, can_sub_expressions)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "32";
+	ArithmeticExpression ae1(s1);
+	EXPECT_EQ((ae - ae1).getAnswer(), 98);
+}
+TEST(ArithmeticExpression, can_mul_expressions)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "2";
+	ArithmeticExpression ae1(s1);
+	EXPECT_EQ((ae * ae1).getAnswer(), 260);
+}
+TEST(ArithmeticExpression, can_div_expressions)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "2";
+	ArithmeticExpression ae1(s1);
+	EXPECT_EQ((ae / ae1).getAnswer(), 65);
+}
+
+
+
+TEST(ArithmeticExpression, can_add_expressions_and_string)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "32";
+	EXPECT_EQ((ae + s1).getAnswer(), 162);
+}
+TEST(ArithmeticExpression, can_sub_expressions_and_string)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "32";
+	EXPECT_EQ((ae - s1).getAnswer(), 98);
+}
+TEST(ArithmeticExpression, can_mul_expressions_and_string)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "2";
+	EXPECT_EQ((ae * s1).getAnswer(), 260);
+}
+TEST(ArithmeticExpression, can_div_expressions_and_string)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	string s1 = "2";
+	EXPECT_EQ((ae / s1).getAnswer(), 65);
+}
+
+
+TEST(ArithmeticExpression, can_add_expressions_and_int)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	int a = 2;
+	EXPECT_EQ((ae + a).getAnswer(), 132);
+}
+TEST(ArithmeticExpression, can_sub_expressions_and_int)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	int a = 2;
+	EXPECT_EQ((ae - a).getAnswer(), 128);
+}
+TEST(ArithmeticExpression, can_mul_expressions_and_int)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	int a = 2;
+	EXPECT_EQ((ae * a).getAnswer(), 260);
+}
+TEST(ArithmeticExpression, can_div_expressions_and_int)
+{
+	string s = "54+76";
+	ArithmeticExpression ae(s);
+	int a = 2;
+	EXPECT_EQ((ae / a).getAnswer(), 65);
 }

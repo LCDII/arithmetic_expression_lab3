@@ -1,15 +1,14 @@
 #include "AnswerGiver.h"
 #include"TStack.h"
 
-AnswerGiver::AnswerGiver() : Handler(), out(0){}
-AnswerGiver::AnswerGiver(Handler* _handler) : Handler(_handler), out(0)
+AnswerGiver::AnswerGiver() : Handler(){}
+AnswerGiver::AnswerGiver(Handler* _handler) : Handler(_handler)
 {
 
 }
 AnswerGiver::AnswerGiver(const AnswerGiver& ag):Handler(ag)
 {
 	in = ag.in;
-	out = ag.out;
 }
 
 void AnswerGiver::run(ISolver* solver)

@@ -12,7 +12,6 @@ class PostfixConverter : public Handler
 	TQueue<Lexem> in;
 	TQueue<Lexem> out;
 	map<char, int> priority;
-	int st_size;
 public:
 	PostfixConverter();
 	PostfixConverter(Handler* _handler);

@@ -125,7 +125,7 @@ void LexisMachine::run(ISolver* solver)
 		}
 	}
 
-	//for no unnecessary places in queue
+	//for no unnecessary places in queue. Refactoring of queue if we have 1234+56 size of q will be 5, not 9
 	TQueue<Lexem>_(out);
 
 	int outSize = 1;
@@ -155,6 +155,7 @@ void LexisMachine::run(ISolver* solver)
 			cout << error.what() << endl;
 		}
 		solver->getErrors().clear();
+		state = 0;
 		throw LanguageException("LexisError");
 	}
 }

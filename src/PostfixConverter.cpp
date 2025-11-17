@@ -16,7 +16,6 @@ PostfixConverter::PostfixConverter(const PostfixConverter& pc):Handler(pc)
 	in = pc.in;
 	out = pc.out;
 	priority = pc.priority;
-	st_size = pc.st_size;
 }
 
 
@@ -26,7 +25,7 @@ void PostfixConverter::run(ISolver* solver)
 	//--------------------------------------------------------
 	TQueue<Lexem>_(in);
 	int outSize = 1;
-	int operatorsCount = 0;
+	int operatorsCount = 1;
 	while (!_.isEmpty())
 	{
 		Lexem l = _.pop();
@@ -40,7 +39,7 @@ void PostfixConverter::run(ISolver* solver)
 	outSize += operatorsCount*2;// unar - or +  is  +1 in queue size : [-, 1] -> [0, -, 1], *2 for every operator - garant
 	out = TQueue<Lexem>(outSize);
 	//------------------------------------------------------------------------
-	//That is beacause we do not use Linked List in TQueue
+	//This is beacause we do not use Linked List in TQueue
 
 	Lexem stackItem;
 	while (!in.isEmpty())
@@ -105,8 +104,8 @@ void PostfixConverter::run(ISolver* solver)
 	}
 
 	//------------------------------------------------------------------------
-	//That is beacause we do not use Linked List in TQueue
-	_ = TQueue<Lexem>(out);
+	//This is beacause we do not use Linked List in TQueue
+	_ = TQueue<Lexem>(out); //same as in syntax, for unnecesary places in q
 
 	outSize = 1; 
 	while (!_.isEmpty())

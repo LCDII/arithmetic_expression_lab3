@@ -2,6 +2,7 @@
 #include<string>
 #include"TQueue.h"
 #include"Lexem.h"
+#include<iostream>
 
 class ISolver;
 class ArithmeticExpression
@@ -30,4 +31,12 @@ public:
 	ArithmeticExpression operator-(const string& s);
 	ArithmeticExpression operator*(const string& s);
 	ArithmeticExpression operator/(const string& s);
+
+	ArithmeticExpression operator+(const int& s);
+	ArithmeticExpression operator-(const int& s);
+	ArithmeticExpression operator*(const int& s);
+	ArithmeticExpression operator/(const int& s);
+
+	friend std::ostream& operator<<(std::ostream& ostr, ArithmeticExpression ae);
+
 };

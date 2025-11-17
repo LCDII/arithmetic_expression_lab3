@@ -219,7 +219,10 @@ void SyntaxisMachine::run(ISolver* _solver)
 	if(solver->getErrors().empty())
 	{
 		solver->getInfix() = out;
+		//because we have singlton
 		state = 0;
+		errorIndex = 0;
+		//--------------------------
 		Handler::run(solver);
 	}
 	else
@@ -228,7 +231,13 @@ void SyntaxisMachine::run(ISolver* _solver)
 		{
 			cout << error.what() << endl;
 		}
+		//because we have singlton
 		solver->getErrors().clear();
+		state = 0;
+		errorIndex = 0;
+		bracketsOpened.clear();
+		bracketsClosed.clear();
+		//-------------------------
 		throw SyntaxisException("Syntaxis error");
 	}
 }
