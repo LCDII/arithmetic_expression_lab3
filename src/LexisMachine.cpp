@@ -145,8 +145,7 @@ void LexisMachine::run(ISolver* solver)
 	if(solver->getErrors().empty())
 	{
 		solver->getInfix() = resultOut;
-
-
+		state = 0;
 		Handler::run(solver);
 	} 
 	else

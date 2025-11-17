@@ -20,4 +20,14 @@ public:
 	TQueue<Lexem> getInfix();
 	TQueue<Lexem> getPostfix();
 	int getAnswer();
+
+	ArithmeticExpression operator+(const ArithmeticExpression& ae);
+	ArithmeticExpression operator-(const ArithmeticExpression& ae);
+	ArithmeticExpression operator*(const ArithmeticExpression& ae);
+	ArithmeticExpression operator/(const ArithmeticExpression& ae);
+
+	ArithmeticExpression operator+(const string& s);
+	ArithmeticExpression operator-(const string& s);
+	ArithmeticExpression operator*(const string& s);
+	ArithmeticExpression operator/(const string& s);
 };

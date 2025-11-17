@@ -12,7 +12,6 @@ ArithmeticExpression::ArithmeticExpression(string _in) : in(_in)
 	//or we can just set in as 0
 	
 	solver = FSolver::getSolver(this);
-
 	try
 	{
 		solver->solve();
@@ -45,7 +44,7 @@ ArithmeticExpression::ArithmeticExpression(const ArithmeticExpression& ae)
 	in = ae.in;
 	infix = ae.infix;
 	postfix = ae.postfix;
-	solver = ae.solver;
+	solver = ae.solver;//ask?
 	answer = ae.answer;
 }
 
@@ -86,3 +85,44 @@ int ArithmeticExpression::getAnswer()
 {
 	return answer;
 }
+
+
+
+
+
+ArithmeticExpression ArithmeticExpression::operator+(const string& s)
+{
+	return ArithmeticExpression(to_string(this->answer) + "+" + s);
+}
+ArithmeticExpression ArithmeticExpression::operator-(const string& s)
+{
+	return ArithmeticExpression(to_string(this->answer) + "-" + s);
+}
+ArithmeticExpression ArithmeticExpression::operator*(const string& s)
+{
+	return ArithmeticExpression(to_string(this->answer) + "*" + s);
+}
+ArithmeticExpression ArithmeticExpression::operator/(const string& s)
+{
+	return ArithmeticExpression(to_string(this->answer) + "/" + s);
+}
+
+
+
+ArithmeticExpression ArithmeticExpression::operator+(const ArithmeticExpression& ae)
+{
+	return *this + to_string(ae.answer);
+}
+ArithmeticExpression ArithmeticExpression::operator-(const ArithmeticExpression& ae)
+{
+	return *this - to_string(ae.answer);
+}
+ArithmeticExpression ArithmeticExpression::operator*(const ArithmeticExpression& ae)
+{
+	return *this * to_string(ae.answer);
+}
+ArithmeticExpression ArithmeticExpression::operator/(const ArithmeticExpression& ae)
+{
+	return *this / to_string(ae.answer);
+}
+

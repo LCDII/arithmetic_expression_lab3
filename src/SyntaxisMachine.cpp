@@ -219,6 +219,7 @@ void SyntaxisMachine::run(ISolver* _solver)
 	if(solver->getErrors().empty())
 	{
 		solver->getInfix() = out;
+		state = 0;
 		Handler::run(solver);
 	}
 	else

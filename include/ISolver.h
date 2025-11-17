@@ -27,4 +27,5 @@ public:
 	TQueue<Lexem>& getPostfix();
 	vector<ArithmeticException>& getErrors();
 	int& getAnswer();
+	void setAE(ArithmeticExpression* _ae);
 };

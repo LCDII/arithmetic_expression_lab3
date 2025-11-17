@@ -23,10 +23,10 @@ class TQueue {
 	}
 public:
 
-	TQueue(size_t _sz = 2) : sz(_sz + 1), s(0), f(sz - 1)
+	TQueue(size_t _sz = 1) : sz(_sz + 1), s(0), f(sz - 1)
 	{
-		if (_sz < 2 || _sz > MAX_QUEUE_SIZE)
-			throw "Queue size should be greater than zero and less than max";
+		if (_sz < 1 || _sz > MAX_QUEUE_SIZE)
+			throw "Queue size should be greater than 1 and less than max";
 		mem = new T[sz];
 	}
 

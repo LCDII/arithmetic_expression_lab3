@@ -20,5 +20,7 @@ ISolver* FSolver::getSolver(ArithmeticExpression* _ae)
 						   new AnswerGiver()
 						   ))));
 	}
+	else
+		solver->setAE(_ae);
 	return solver;
 }

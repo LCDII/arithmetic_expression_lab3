@@ -1,7 +1,7 @@
 #include"ISolver.h"
 #include"ArithmeticExpression.h"
 
-ISolver::ISolver(ArithmeticExpression* _ae) : ae(_ae), in(ae->getIn()), answer(0)
+ISolver::ISolver(ArithmeticExpression* _ae) : ae(_ae), in(ae->getIn()), answer(0), infix(TQueue<Lexem>()), postfix(TQueue<Lexem>())
 {
 
 }
@@ -28,4 +28,13 @@ int& ISolver::getAnswer()
 vector<ArithmeticException>& ISolver::getErrors()
 {
 	return errors;
+}
+void ISolver::setAE(ArithmeticExpression* _ae)
+{
+	ae = _ae;
+	in = ae->getIn();
+	infix = TQueue<Lexem>();
+	postfix = TQueue<Lexem>();
+	answer = 0;
+	errors.clear();//not neccesary
 }
