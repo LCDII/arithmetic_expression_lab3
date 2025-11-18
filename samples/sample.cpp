@@ -34,8 +34,6 @@ int main()
 	cout << (ae * a).getAnswer() << endl;
 	cout << (ae / a).getAnswer() << endl;
 	cout << "_______________" << endl;
-
-
 	cout << ae;
 }				  
 

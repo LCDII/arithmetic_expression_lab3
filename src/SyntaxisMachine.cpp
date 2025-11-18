@@ -292,11 +292,13 @@ void SyntaxisMachine::PushLexem(Lexem& lex)//f1 //for all non except pushes
 void SyntaxisMachine::pushOperatorUn(Lexem& lex)//f2
 {
 	if (char(lex.getValue()) == '+' || char(lex.getValue()) == '-')
+	{
 		lex.setUn();
+		out.push(lex);
+		errorIndex++;
+	}
 	else
 		pushOperatorExcept(lex);
-	out.push(lex);
-	errorIndex++;
 }
 void SyntaxisMachine::pushOperatorExcept(Lexem& lex)//f3
 {
