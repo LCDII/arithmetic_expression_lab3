@@ -1,8 +1,6 @@
 #pragma once
 #include<iostream>
 #include<vector>
-#ifndef __TStack_H__
-#define __TStack_H__
 
 
 using namespace std;
@@ -54,11 +52,11 @@ public:
         delete[] mem;
     }
 
-    bool isEmpty() const {
+    bool isEmpty() const noexcept {
         return (curr == -1);
     }
 
-    bool isFull() const {
+    bool isFull() const  noexcept {
         return (curr == sz - 1);
     }
     void push(const T& v)
@@ -83,7 +81,12 @@ public:
         return mem[curr];
     }
 
-    void clear()
+    size_t getMaxSize() noexcept
+    {
+        return sz;
+    }
+
+    void clear() noexcept
     {
         while (!isEmpty())
             pop();
@@ -104,4 +107,3 @@ public:
 
 };
 
-#endif

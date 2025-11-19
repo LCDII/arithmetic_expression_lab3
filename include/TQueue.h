@@ -3,9 +3,6 @@
 #include <iostream>
 #include<string>
 
-#ifndef __TQueue_H__
-#define __TQueue_H__
-
 using namespace std;
 
 const int MAX_QUEUE_SIZE = 1000;
@@ -61,11 +58,11 @@ public:
 	}
 
 
-	bool isFull()
+	bool isFull() noexcept
 	{
 		return s == next(next(f));
 	}
-	bool isEmpty()
+	bool isEmpty() noexcept
 	{
 		return s == next(f);
 	}
@@ -92,6 +89,33 @@ public:
 		return res;
 	}
 
+	size_t getMaxSize() noexcept
+	{
+		return sz;
+	}
+
+	//need in arithmetics ------------------------------------------------------------------------------------------
+
+	void clear() noexcept
+	{
+		while (!isEmpty())
+			pop();
+	}
+	size_t getActualSize() noexcept
+	{
+		return isEmpty() ? 0 : (s <= f ? f - s + 1 : (sz - s) + f + 1);
+	}
+
+	TQueue refactor()//function to cut out  not neccesarry place in q
+	{
+		size_t newSize = getActualSize();
+		TQueue tmp(*this);//to not change origin
+		TQueue res(newSize);
+		while (!tmp.isEmpty())
+			res.push(tmp.pop());
+		return res;
+	}
+	//--------------------------------------------------------------------------------------------------------------
 
 	bool operator==(const TQueue<T>& q)
 	{
@@ -131,4 +155,3 @@ public:
 	}
 };
 
-#endif

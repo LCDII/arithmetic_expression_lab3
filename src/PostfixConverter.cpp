@@ -22,24 +22,11 @@ PostfixConverter::PostfixConverter(const PostfixConverter& pc):Handler(pc)
 void PostfixConverter::run(ISolver* solver)
 {
 	in = solver->getInfix();
-	//--------------------------------------------------------
-	TQueue<Lexem>_(in);
-	int outSize = 1;
-	int operatorsCount = 1;
-	while (!_.isEmpty())
-	{
-		Lexem l = _.pop();
-		if (!l.IsNum())
-			operatorsCount++;
-		outSize++;
-	}
 
-	TStack<Lexem> st(operatorsCount);
+	TStack<Lexem> st(in.getActualSize());
 
-	outSize += operatorsCount*2;// unar - or +  is  +1 in queue size : [-, 1] -> [0, -, 1], *2 for every operator - garant
-	out = TQueue<Lexem>(outSize);
-	//------------------------------------------------------------------------
-	//This is beacause we do not use Linked List in TQueue
+	// unar - or +  is  +1 in queue size : [-, 1] -> [0, -, 1], *2 for garant
+	out = TQueue<Lexem>(in.getActualSize()*2);
 
 	Lexem stackItem;
 	while (!in.isEmpty())
@@ -61,9 +48,8 @@ void PostfixConverter::run(ISolver* solver)
 					stackItem = st.pop();
 				}
 			}
-			else if (value == '*' || value == '/' || value == '+' || value == '-')
+			else//ops
 			{
-				//"(40*(-15+30)/15)-1"
 				while (!st.isEmpty())
 				{
 					stackItem = st.pop();
@@ -103,25 +89,8 @@ void PostfixConverter::run(ISolver* solver)
 		out.push(stackItem);
 	}
 
-	//------------------------------------------------------------------------
-	//This is beacause we do not use Linked List in TQueue
-	_ = TQueue<Lexem>(out); //same as in syntax, for unnecesary places in q
 
-	outSize = 1; 
-	while (!_.isEmpty())
-	{
-		outSize++;
-		_.pop();
-	}
-
-	TQueue<Lexem> resultOut(outSize);
-	while (!out.isEmpty())
-	{
-		resultOut.push(out.pop());
-	}
-	//--------------------------------------------------------
-
-	solver->getPostfix() = resultOut;
+	solver->getPostfix() = out.refactor();
 
 	Handler::run(solver);
 }

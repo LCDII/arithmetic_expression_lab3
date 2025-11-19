@@ -14,15 +14,8 @@ AnswerGiver::AnswerGiver(const AnswerGiver& ag):Handler(ag)
 void AnswerGiver::run(ISolver* solver)
 {
 	in = solver->getPostfix();
-	int st_size = 1;
-	TQueue<Lexem>_(in);
-	while (!_.isEmpty())
-	{
-		_.pop();
-		st_size++;
-	}
 
-	TStack<int> stack(st_size);
+	TStack<int> stack(in.getActualSize());
 	while (!in.isEmpty())
 	{
 		Lexem inItem = in.pop();

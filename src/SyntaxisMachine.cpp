@@ -1,5 +1,5 @@
 #include "SyntaxisMachine.h"
-
+#include "FSolver.h"
 
 SyntaxisMachine::SyntaxisMachine() : Handler(), state(0), errorIndex(0)
 {
@@ -187,20 +187,17 @@ void SyntaxisMachine::run(ISolver* _solver)
 	solver = _solver;
 	in = solver->getInfix();
 	out = TQueue<Lexem>(in);
-	int st_size = 1;
-	while (!out.isEmpty())
-	{
-		st_size++;
-		out.pop();
-	}
-	bracketsClosed = TStack<int>(st_size);
-	bracketsOpened = TStack<int>(st_size);
+	bracketsClosed = TStack<int>(out.getMaxSize());
+	bracketsOpened = TStack<int>(out.getMaxSize());
+
+	out.clear();
 
 	while (!in.isEmpty())
 	{
 		Lexem item = in.pop();
 
 		(this->*call[state][findTransitionColumn(item)])(item);
+		out.push(item);//always happens
 		state = next[state][findTransitionColumn(item)];
 	}
 	while (!bracketsOpened.isEmpty())
@@ -267,13 +264,14 @@ int SyntaxisMachine::findTransitionColumn(Lexem lex)
 
 void SyntaxisMachine::PushLexem(Lexem& lex)//f1 //for all non except pushes
 {
-	out.push(lex);
 	if (lex.IsNum())
+	{
 		errorIndex += lex.getLength();
+		return;
+	}
 	else if (char(lex.getValue()) == '(')
 	{
 		bracketsOpened.push(errorIndex);
-		errorIndex++;
 	}
 	else if (char(lex.getValue()) == ')')
 	{
@@ -284,17 +282,21 @@ void SyntaxisMachine::PushLexem(Lexem& lex)//f1 //for all non except pushes
 		{
 			bracketsClosed.push(errorIndex);
 		}
-		errorIndex++;
 	}
-	else
-		errorIndex++;
+	else if (in.getActualSize() == 0)
+	{
+		solver->getErrors().emplace_back(SyntaxisException(
+			"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + string(1, lex.getValue()) + ". Оператор не может завершать выражение!"
+		));//this or do final state in machine (will ask)
+	}
+		
+	errorIndex++;
 }
 void SyntaxisMachine::pushOperatorUn(Lexem& lex)//f2
 {
 	if (char(lex.getValue()) == '+' || char(lex.getValue()) == '-')
 	{
 		lex.setUn();
-		out.push(lex);
 		errorIndex++;
 	}
 	else
@@ -302,8 +304,6 @@ void SyntaxisMachine::pushOperatorUn(Lexem& lex)//f2
 }
 void SyntaxisMachine::pushOperatorExcept(Lexem& lex)//f3
 {
-	out.push(lex);
-
 	solver->getErrors().emplace_back(SyntaxisException(
 		"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + string(1, lex.getValue()) +". Оператор не может стоять здесь!"
 	));
@@ -311,7 +311,6 @@ void SyntaxisMachine::pushOperatorExcept(Lexem& lex)//f3
 }
 void SyntaxisMachine::pushOpenBracketExcept(Lexem& lex)//f4
 {
-	out.push(lex);
 	bracketsOpened.push(errorIndex);
 	solver->getErrors().emplace_back(SyntaxisException(
 		"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + string(1, lex.getValue())+". Скобка не может стоять здесь!"
@@ -321,7 +320,6 @@ void SyntaxisMachine::pushOpenBracketExcept(Lexem& lex)//f4
 }
 void SyntaxisMachine::pushCloseBracketExcept(Lexem& lex)//f5
 {
-	out.push(lex);
 	try {
 		bracketsOpened.pop();
 	}
@@ -337,7 +335,6 @@ void SyntaxisMachine::pushCloseBracketExcept(Lexem& lex)//f5
 }
 void SyntaxisMachine::pushNumberExcept(Lexem& lex)//f6       cant happen with [56, 76] but can happen with  [ ) , 56] in queue
 {
-	out.push(lex);
 	solver->getErrors().emplace_back(SyntaxisException(
 		"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + to_string(lex.getValue())+". Число не может стоять здесь!"
 	));
