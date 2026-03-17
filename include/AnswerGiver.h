@@ -1,17 +1,16 @@
 #pragma once
 
-
-#include"Handler.h"
-#include"TQueue.h"
-#include"Lexem.h"
+#include "Handler.h"
+#include "ExprTree.h"
 
 class ISolver;
-class AnswerGiver : public Handler 
+
+class AnswerGiver : public Handler
 {
-	TQueue<Lexem> in;
 public:
-	AnswerGiver();
-	AnswerGiver(Handler* _handler);
-	AnswerGiver(const AnswerGiver& ag);
-	virtual void run(ISolver* solver);
+    AnswerGiver();
+    AnswerGiver(Handler* _handler);
+    AnswerGiver(const AnswerGiver& ag);
+
+    virtual void run(ISolver* solver);
 };

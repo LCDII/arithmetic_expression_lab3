@@ -3,6 +3,7 @@
 #include<string>
 #include<vector>
 #include"Exceptions.h"
+#include"ExprTree.h"
 
 
 
@@ -17,14 +18,17 @@ protected:
 	std::string in;
 	vector<ArithmeticException> errors;
 	TQueue<Lexem> infix;
-	TQueue<Lexem> postfix;
 	int answer;
+
+	Expr* root;
 public:
 	ISolver(ArithmeticExpression* _ae);
 	virtual void solve() = 0;
 	const string getIn();
 	TQueue<Lexem>& getInfix();
-	TQueue<Lexem>& getPostfix();
+
+	Expr*& getTree();
+
 	vector<ArithmeticException>& getErrors();
 	int& getAnswer();
 	void setAE(ArithmeticExpression* _ae);

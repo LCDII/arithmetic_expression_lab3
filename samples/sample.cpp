@@ -10,7 +10,7 @@ int main()
 	setlocale(LC_ALL, "Ru");
 	string s = "1-(-1)";
 	string s2 = "56+1";
-	string s3 = "5*";
+	string s3 = "5*2";
 	ArithmeticExpression ae(s);
 	ArithmeticExpression ae1(s2);
 	ArithmeticExpression ae2(s3);

@@ -1,51 +1,24 @@
-#include "AnswerGiver.h"
-#include"TStack.h"
+﻿#include "AnswerGiver.h"
+#include "ISolver.h"
 
-AnswerGiver::AnswerGiver() : Handler(){}
-AnswerGiver::AnswerGiver(Handler* _handler) : Handler(_handler)
-{
+AnswerGiver::AnswerGiver() : Handler() {}
 
-}
-AnswerGiver::AnswerGiver(const AnswerGiver& ag):Handler(ag)
-{
-	in = ag.in;
-}
+AnswerGiver::AnswerGiver(Handler* _handler) : Handler(_handler) {}
+
+AnswerGiver::AnswerGiver(const AnswerGiver& ag) : Handler(ag) {}
+
+// -----------------------------------------
 
 void AnswerGiver::run(ISolver* solver)
 {
-	in = solver->getPostfix();
+   
+    Expr* root = solver->getTree();
 
-	TStack<int> stack(in.getActualSize());
-	while (!in.isEmpty())
-	{
-		Lexem inItem = in.pop();
-		if (inItem.IsNum())
-			stack.push(inItem.getValue());
-		else
-		{
-			char c = char(inItem.getValue());
-			int n2 = stack.pop();
-			int n1 = stack.pop();
-			switch (c)
-			{
-			case'+':
-				stack.push(n1 + n2);
-				break;
-			case'-':
-				stack.push(n1 - n2);
-				break;
-			case'*':
-				stack.push(n1 * n2);
-				break;
-			case'/':
-				stack.push(n1 / n2);
-				break;
-			}
-		}
-	}
+    CalcVisitor cv;
 
-	solver->getAnswer() = stack.pop();
+    int result = root->accept(&cv);
 
+    solver->getAnswer() = result;
 
-	Handler::run(solver);
+    Handler::run(solver);
 }

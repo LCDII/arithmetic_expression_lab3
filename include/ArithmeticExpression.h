@@ -3,13 +3,14 @@
 #include"TQueue.h"
 #include"Lexem.h"
 #include<iostream>
+#include"ExprTree.h"
 
 class ISolver;
 class ArithmeticExpression
 {
 	std::string in;
 	TQueue<Lexem> infix;
-	TQueue<Lexem> postfix;
+	Expr* tree;
 	ISolver* solver;
 	int answer;
 public:
@@ -19,7 +20,6 @@ public:
 	~ArithmeticExpression();
 	string getIn();
 	TQueue<Lexem> getInfix();
-	TQueue<Lexem> getPostfix();
 	int getAnswer();
 
 	ArithmeticExpression operator+(const ArithmeticExpression& ae);
@@ -37,6 +37,6 @@ public:
 	ArithmeticExpression operator*(const int& s);
 	ArithmeticExpression operator/(const int& s);
 
-	friend std::ostream& operator<<(std::ostream& ostr, ArithmeticExpression ae);
+	friend std::ostream& operator<<(std::ostream& ostr, ArithmeticExpression& ae);
 
 };

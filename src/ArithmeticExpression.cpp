@@ -25,7 +25,7 @@ ArithmeticExpression::ArithmeticExpression(string _in) : in(_in)
 	catch (NoNextHandlersException nnh)
 	{
 		infix = solver->getInfix();
-		postfix = solver->getPostfix();
+		tree = solver->getTree();
 		answer = solver->getAnswer();
 	}
 	catch (LanguageException le)
@@ -44,7 +44,6 @@ ArithmeticExpression::ArithmeticExpression(const ArithmeticExpression& ae)
 {
 	in = ae.in;
 	infix = ae.infix;
-	postfix = ae.postfix;
 	solver = ae.solver;//ask?
 	answer = ae.answer;
 }
@@ -55,7 +54,6 @@ ArithmeticExpression& ArithmeticExpression::operator=(const ArithmeticExpression
 
 	in = ae.in;
 	infix = ae.infix;
-	postfix = ae.postfix;
 	solver = ae.solver;
 	answer = ae.answer;
 
@@ -77,10 +75,7 @@ TQueue<Lexem> ArithmeticExpression::getInfix()
 	return infix;
 }
 
-TQueue<Lexem> ArithmeticExpression::getPostfix()
-{
-	return postfix;
-}
+
 
 int ArithmeticExpression::getAnswer()
 {
@@ -148,10 +143,17 @@ ArithmeticExpression ArithmeticExpression::operator/(const int& i)
 }
 
 
-ostream& operator<<(ostream& ostr, ArithmeticExpression ae)
+ostream& operator<<(ostream& ostr, ArithmeticExpression& ae)
 {
-	ostr << "Инфиксная запись: " << ae.infix;
-	ostr << "Постфиксная запись: " << ae.postfix;
+	PrintVisitor pv;
+	PrintPostfixVisitor ppv;
+	ostr << endl;
+	ostr << "Инфиксная запись: ";
+	ae.tree->accept(&pv);
+	ostr << endl;
+	ostr << "Постфиксная запись: ";
+	ae.tree->accept(&ppv);
+	ostr << endl;
 	ostr << "Ответ: " << ae.answer << endl;
 	return ostr;
 }

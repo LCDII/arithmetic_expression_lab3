@@ -90,7 +90,5 @@ void PostfixConverter::run(ISolver* solver)
 	}
 
 
-	solver->getPostfix() = out.refactor();
-
 	Handler::run(solver);
 }

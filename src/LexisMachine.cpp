@@ -125,22 +125,6 @@ void LexisMachine::run(ISolver* solver)
 		}
 	}
 
-	//for no unnecessary places in queue. Refactoring of queue if we have 1234+56 size of q will be 5, not 9
-	/*TQueue<Lexem>_(out);
-
-	int outSize = 1;
-	while (!_.isEmpty())
-	{
-		outSize++;
-		_.pop();
-	}
-
-	TQueue<Lexem> resultOut(outSize);
-	while (!out.isEmpty())
-	{
-		resultOut.push(out.pop());
-	}*/
-
 
 	if(solver->getErrors().empty())
 	{

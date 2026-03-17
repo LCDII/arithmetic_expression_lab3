@@ -1,111 +1,66 @@
+п»ї
+
 #include "SyntaxisMachine.h"
 #include "FSolver.h"
+
+// -------------------- AST helpers --------------------
+
+int SyntaxisMachine::priority(char op)
+{
+	if (op == '+' || op == '-') return 1;
+	if (op == '*' || op == '/') return 2;
+	return 0;
+}
+
+void SyntaxisMachine::makeOperation(char op)
+{
+	Expr* right = treeStack.pop();
+	Expr* left = treeStack.pop();
+	treeStack.push(new BiOperation(op, left, right));
+}
+
+Expr* SyntaxisMachine::getTree()
+{
+	return root;
+}
+
+// -----------------------------------------------------
 
 SyntaxisMachine::SyntaxisMachine() : Handler(), state(0), errorIndex(0)
 {
 	next = new int* [3];
 	call = new Func * [3];
+
 	for (size_t i = 0; i < 3; i++)
 	{
 		next[i] = new int[4];
 		call[i] = new Func[4];
 	}
 
-
-	/*
-		| ( | ) | /*+- | num |
-	0	| 0 | 1 |   2  |  1  |
-	1	| 0 | 1 |   2  |  1  |
-	2	| 0 | 1 |   2  |  1  |
-	*/
-	next[0][0] = 0;
-	next[0][1] = 1;
-	next[0][2] = 2;
-	next[0][3] = 1;
-	next[1][0] = 0;
-	next[1][1] = 1;
-	next[1][2] = 2;
-	next[1][3] = 1;
-	next[2][0] = 0;
-	next[2][1] = 1;
-	next[2][2] = 2;
-	next[2][3] = 1;
-
-
-
-	/*
-		| (  | )  | /*+- | num |
-	0	| f1 | f5 |  f2  | f1  |
-	1	| f4 | f1 |  f1  | f6  |
-	2	| f1 | f5 |  f3  | f1  |
-	*/
+	next[0][0] = 0; next[0][1] = 1; next[0][2] = 2; next[0][3] = 1;
+	next[1][0] = 0; next[1][1] = 1; next[1][2] = 2; next[1][3] = 1;
+	next[2][0] = 0; next[2][1] = 1; next[2][2] = 2; next[2][3] = 1;
 
 	call[0][0] = &SyntaxisMachine::PushLexem;
 	call[0][1] = &SyntaxisMachine::pushCloseBracketExcept;
 	call[0][2] = &SyntaxisMachine::pushOperatorUn;
 	call[0][3] = &SyntaxisMachine::PushLexem;
+
 	call[1][0] = &SyntaxisMachine::pushOpenBracketExcept;
 	call[1][1] = &SyntaxisMachine::PushLexem;
 	call[1][2] = &SyntaxisMachine::PushLexem;
 	call[1][3] = &SyntaxisMachine::pushNumberExcept;
+
 	call[2][0] = &SyntaxisMachine::PushLexem;
 	call[2][1] = &SyntaxisMachine::pushCloseBracketExcept;
 	call[2][2] = &SyntaxisMachine::pushOperatorExcept;
 	call[2][3] = &SyntaxisMachine::PushLexem;
 }
-SyntaxisMachine::SyntaxisMachine(Handler* _handler) : Handler(_handler), state(0), errorIndex(0)
+
+SyntaxisMachine::SyntaxisMachine(Handler* _handler) : SyntaxisMachine()
 {
-	next = new int* [3];
-	call = new Func * [3];
-	for (size_t i = 0; i < 3; i++)
-	{
-		next[i] = new int[4];
-		call[i] = new Func[4];
-	}
-
-
-	/*
-		| ( | ) | /*+- | num |
-	0	| 0 | 1 |   2  |  1  |
-	1	| 0 | 1 |   2  |  1  |
-	2	| 0 | 1 |   2  |  1  |
-	*/
-	next[0][0] = 0;
-	next[0][1] = 1;
-	next[0][2] = 2;
-	next[0][3] = 1;
-	next[1][0] = 0;
-	next[1][1] = 1;
-	next[1][2] = 2;
-	next[1][3] = 1;
-	next[2][0] = 0;
-	next[2][1] = 1;
-	next[2][2] = 2;
-	next[2][3] = 1;
-
-
-
-	/*
-		| (  | )  | /*+- | num |
-	0	| f1 | f5 |  f2  | f1  |
-	1	| f4 | f1 |  f1  | f6  |
-	2	| f1 | f5 |  f3  | f1  |
-	*/
-
-	call[0][0] = &SyntaxisMachine::PushLexem;
-	call[0][1] = &SyntaxisMachine::pushCloseBracketExcept;
-	call[0][2] = &SyntaxisMachine::pushOperatorUn;
-	call[0][3] = &SyntaxisMachine::PushLexem;
-	call[1][0] = &SyntaxisMachine::pushOpenBracketExcept;
-	call[1][1] = &SyntaxisMachine::PushLexem;
-	call[1][2] = &SyntaxisMachine::PushLexem;
-	call[1][3] = &SyntaxisMachine::pushNumberExcept;
-	call[2][0] = &SyntaxisMachine::PushLexem;
-	call[2][1] = &SyntaxisMachine::pushCloseBracketExcept;
-	call[2][2] = &SyntaxisMachine::pushOperatorExcept;
-	call[2][3] = &SyntaxisMachine::PushLexem;
+	Handler::operator=(*_handler);
 }
-
 
 SyntaxisMachine::~SyntaxisMachine()
 {
@@ -117,228 +72,210 @@ SyntaxisMachine::~SyntaxisMachine()
 	delete[] next;
 	delete[] call;
 }
+
 SyntaxisMachine::SyntaxisMachine(const SyntaxisMachine& sm) : Handler(sm)
 {
-	in = sm.in;
-	out = sm.out;
-	errorIndex = sm.errorIndex;
-	state = sm.state;
-	solver = sm.solver;
-
-
-	next = new int* [3];
-	call = new Func * [3];
-
-	for (size_t i = 0; i < 3; i++)
-	{
-		next[i] = new int[4];
-		call[i] = new Func[4];
-		for (size_t j = 0; j < 4; j++)
-		{
-			next[i][j] = sm.next[i][j];
-			call[i][j] = sm.call[i][j];
-		}
-	}
+	*this = sm;
 }
+
 SyntaxisMachine& SyntaxisMachine::operator=(const SyntaxisMachine& sm)
 {
 	if (this == &sm) return *this;
-	for (size_t i = 0; i < 2; i++)
-	{
-		delete[] next[i];
-		delete[] call[i];
-	}
-	delete[] next;
-	delete[] call;
 
 	in = sm.in;
-	out = sm.out;
 	errorIndex = sm.errorIndex;
 	state = sm.state;
 	solver = sm.solver;
-	next = sm.next;
 
-
-	next = new int* [3];
-	call = new Func * [3];
-
-	for (size_t i = 0; i < 3; i++)
-	{
-		next[i] = new int[4];
-		call[i] = new Func[4];
-		for (size_t j = 0; j < 4; j++)
-		{
-			next[i][j] = sm.next[i][j];
-			call[i][j] = sm.call[i][j];
-		}
-	}
 	return *this;
 }
 
-
-
-//---------------------------------------------------------------------------------------------------------------------------
-
-
-
+// -----------------------------------------------------
 
 void SyntaxisMachine::run(ISolver* _solver)
 {
 	solver = _solver;
 	in = solver->getInfix();
-	out = TQueue<Lexem>(in);
-	bracketsClosed = TStack<int>(out.getMaxSize());
-	bracketsOpened = TStack<int>(out.getMaxSize());
 
-	out.clear();
+	treeStack = TStack<Expr*>(in.getMaxSize());
+	opStack = TStack<char>(in.getMaxSize());
+
+	bracketsClosed = TStack<int>(in.getMaxSize());
+	bracketsOpened = TStack<int>(in.getMaxSize());
 
 	while (!in.isEmpty())
 	{
 		Lexem item = in.pop();
 
 		(this->*call[state][findTransitionColumn(item)])(item);
-		out.push(item);//always happens
+
 		state = next[state][findTransitionColumn(item)];
 	}
+
+	// РґРѕР±РёРІР°РµРј СЃС‚РµРє РѕРїРµСЂР°С‚РѕСЂРѕРІ
+	while (!opStack.isEmpty())
+		makeOperation(opStack.pop());
+
+	root = treeStack.pop();
+
+	// РїСЂРѕРІРµСЂРєР° СЃРєРѕР±РѕРє
 	while (!bracketsOpened.isEmpty())
 	{
-		solver->getErrors().emplace_back(SyntaxisException(
-			"В выражении по индексу: " + to_string(bracketsOpened.pop()) + " присутствует синтаксическая ошибка: " + "(. Нет закрывающей скобки!"
-		));
-	}
-	while (!bracketsClosed.isEmpty())
-	{
-		solver->getErrors().emplace_back(SyntaxisException(
-			"В выражении по индексу: " + to_string(bracketsClosed.pop()) + " присутствует синтаксическая ошибка: " + "). Нет открывающей скобки!"
-		));
+		solver->getErrors().emplace_back(SyntaxisException("РќРµС‚ Р·Р°РєСЂС‹РІР°СЋС‰РµР№ СЃРєРѕР±РєРё!"));
+		bracketsOpened.pop();
 	}
 
-	if(solver->getErrors().empty())
+	while (!bracketsClosed.isEmpty())
 	{
-		solver->getInfix() = out;
-		//because we have singlton
+		solver->getErrors().emplace_back(SyntaxisException("РќРµС‚ РѕС‚РєСЂС‹РІР°СЋС‰РµР№ СЃРєРѕР±РєРё!"));
+		bracketsClosed.pop();
+	}
+
+	if (solver->getErrors().empty())
+	{
+		solver->getTree() = root;
+
 		state = 0;
 		errorIndex = 0;
-		//--------------------------
+
 		Handler::run(solver);
 	}
 	else
 	{
-		for (ArithmeticException error : solver->getErrors())
-		{
+		for (auto& error : solver->getErrors())
 			cout << error.what() << endl;
-		}
-		//because we have singlton
+
 		solver->getErrors().clear();
+
 		state = 0;
 		errorIndex = 0;
 		bracketsOpened.clear();
 		bracketsClosed.clear();
-		//-------------------------
+
 		throw SyntaxisException("Syntaxis error");
 	}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
-
+// -----------------------------------------------------
 
 int SyntaxisMachine::findTransitionColumn(Lexem lex)
 {
-	if (lex.IsNum())
-		return 3;
-	else if (char(lex.getValue()) == ')')
-		return 1;
-	else if (char(lex.getValue()) == '(')
-		return 0;
-	else
-		return 2;
+	if (lex.IsNum()) return 3;
+	if (char(lex.getValue()) == ')') return 1;
+	if (char(lex.getValue()) == '(') return 0;
+	return 2;
 }
 
-/*
-			| (  | )  | /*+- | num |
-		0	| f1 | f5 |  f2  | f1  |
-		1	| f4 | f1 |  f1  | f6  |
-		2	| f1 | f5 |  f3  | f1  |
-	*/
+// -----------------------------------------------------
 
-
-void SyntaxisMachine::PushLexem(Lexem& lex)//f1 //for all non except pushes
+void SyntaxisMachine::PushLexem(Lexem& lex)
 {
 	if (lex.IsNum())
 	{
+		treeStack.push(new Number(lex.getValue()));
 		errorIndex += lex.getLength();
 		return;
 	}
-	else if (char(lex.getValue()) == '(')
+
+	char c = char(lex.getValue());
+
+	if (c == '(')
 	{
 		bracketsOpened.push(errorIndex);
+		opStack.push('(');
 	}
-	else if (char(lex.getValue()) == ')')
+	else if (c == ')')
 	{
-		try {
-			bracketsOpened.pop();
-		}
-		catch (...)
-		{
-			bracketsClosed.push(errorIndex);
-		}
+		try { bracketsOpened.pop(); }
+		catch (...) { bracketsClosed.push(errorIndex); }
+
+		while (!opStack.isEmpty() && opStack.top() != '(')
+			makeOperation(opStack.pop());
+
+		if (!opStack.isEmpty())
+			opStack.pop();
 	}
 	else if (in.getActualSize() == 0)
 	{
 		solver->getErrors().emplace_back(SyntaxisException(
-			"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + string(1, lex.getValue()) + ". Оператор не может завершать выражение!"
+			"Р’ РІС‹СЂР°Р¶РµРЅРёРё РїРѕ РёРЅРґРµРєСЃСѓ: " + to_string(errorIndex) + " РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: " + string(1, lex.getValue()) + ". РћРїРµСЂР°С‚РѕСЂ РЅРµ РјРѕР¶РµС‚ Р·Р°РІРµСЂС€Р°С‚СЊ РІС‹СЂР°Р¶РµРЅРёРµ!"
 		));//this or do final state in machine (will ask)
 	}
-		
+	else
+	{
+		while (!opStack.isEmpty() && priority(opStack.top()) >= priority(c))
+			makeOperation(opStack.pop());
+
+		opStack.push(c);
+	}
+
 	errorIndex++;
 }
-void SyntaxisMachine::pushOperatorUn(Lexem& lex)//f2
+
+// ----------- Р’РђР–РќРћ: РЈРќРђР РќР«Р™ РњРРќРЈРЎ ------------
+
+void SyntaxisMachine::pushOperatorUn(Lexem& lex)
 {
-	if (char(lex.getValue()) == '+' || char(lex.getValue()) == '-')
+	char c = char(lex.getValue());
+
+	if (c == '+' || c == '-')
 	{
 		lex.setUn();
+
+		// РїСЂРµРІСЂР°С‰Р°РµРј РІ (0 - x)
+		treeStack.push(new Number(0));
+		opStack.push(c);
+
 		errorIndex++;
 	}
 	else
+	{
 		pushOperatorExcept(lex);
+	}
 }
-void SyntaxisMachine::pushOperatorExcept(Lexem& lex)//f3
+
+// -----------------------------------------------------
+
+void SyntaxisMachine::pushOperatorExcept(Lexem& lex)
 {
 	solver->getErrors().emplace_back(SyntaxisException(
-		"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + string(1, lex.getValue()) +". Оператор не может стоять здесь!"
+		"Р’ РІС‹СЂР°Р¶РµРЅРёРё РїРѕ РёРЅРґРµРєСЃСѓ: " + to_string(errorIndex) + " РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: " + string(1, lex.getValue()) + ". РћРїРµСЂР°С‚РѕСЂ РЅРµ РјРѕР¶РµС‚ СЃС‚РѕСЏС‚СЊ Р·РґРµСЃСЊ!"
 	));
 	errorIndex++;
 }
-void SyntaxisMachine::pushOpenBracketExcept(Lexem& lex)//f4
+
+void SyntaxisMachine::pushOpenBracketExcept(Lexem& lex)
 {
 	bracketsOpened.push(errorIndex);
+	opStack.push('(');
+
 	solver->getErrors().emplace_back(SyntaxisException(
-		"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + string(1, lex.getValue())+". Скобка не может стоять здесь!"
+		"Р’ РІС‹СЂР°Р¶РµРЅРёРё РїРѕ РёРЅРґРµРєСЃСѓ: " + to_string(errorIndex) + " РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: " + string(1, lex.getValue()) + ". РЎРєРѕР±РєР° РЅРµ РјРѕР¶РµС‚ СЃС‚РѕСЏС‚СЊ Р·РґРµСЃСЊ!"
 	));
 	errorIndex++;
-
 }
-void SyntaxisMachine::pushCloseBracketExcept(Lexem& lex)//f5
+
+void SyntaxisMachine::pushCloseBracketExcept(Lexem& lex)
 {
-	try {
-		bracketsOpened.pop();
-	}
-	catch (...)
-	{
-		bracketsClosed.push(errorIndex);
-	}
+	try { bracketsOpened.pop(); }
+	catch (...) { bracketsClosed.push(errorIndex); }
+
+	while (!opStack.isEmpty() && opStack.top() != '(')
+		makeOperation(opStack.pop());
+
+	if (!opStack.isEmpty())
+		opStack.pop();
+
 	solver->getErrors().emplace_back(SyntaxisException(
-		"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + string(1, lex.getValue())+". Скобка не может стоять здесь!"
+		"Р’ РІС‹СЂР°Р¶РµРЅРёРё РїРѕ РёРЅРґРµРєСЃСѓ: " + to_string(errorIndex) + " РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: " + string(1, lex.getValue()) + ". РЎРєРѕР±РєР° РЅРµ РјРѕР¶РµС‚ СЃС‚РѕСЏС‚СЊ Р·РґРµСЃСЊ!"
 	));
 	errorIndex++;
-
 }
-void SyntaxisMachine::pushNumberExcept(Lexem& lex)//f6       cant happen with [56, 76] but can happen with  [ ) , 56] in queue
+
+void SyntaxisMachine::pushNumberExcept(Lexem& lex)
 {
 	solver->getErrors().emplace_back(SyntaxisException(
-		"В выражении по индексу: " + to_string(errorIndex) + " присутствует синтаксическая ошибка: " + to_string(lex.getValue())+". Число не может стоять здесь!"
+		"Р’ РІС‹СЂР°Р¶РµРЅРёРё РїРѕ РёРЅРґРµРєСЃСѓ: " + to_string(errorIndex) + " РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: " + to_string(lex.getValue()) + ". Р§РёСЃР»Рѕ РЅРµ РјРѕР¶РµС‚ СЃС‚РѕСЏС‚СЊ Р·РґРµСЃСЊ!"
 	));
-
-	errorIndex += lex.getLength()-1;
+	errorIndex += lex.getLength() - 1;
 }
-
