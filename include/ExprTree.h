@@ -1,37 +1,42 @@
 #pragma once
 #include <iostream>
 
-class Number;
+class IntegerNode;
 class BiOperation;
 
 class Visitor {
 public:
-    virtual int visitNumber(Number* num) = 0;
+    virtual int visitNumber(IntegerNode* num) = 0;
     virtual int visitBiOperation(BiOperation* op) = 0;
 };
 
 class Expr {
 public:
-    virtual int accept(Visitor* v) = 0;
+    virtual void accept(Visitor* v) = 0;
     virtual ~Expr() {}
 };
 
-class Number : public Expr {
+class IntegerNode : public Expr {
     int val;
 public:
-    Number(int v) : val(v) {}
+    IntegerNode(int v) : val(v) {}
     int getVal() { return val; }
 
-    int accept(Visitor* v) override {
-        return v->visitNumber(this);
+    void accept(Visitor* v) override {
+        v->visitNumber(this);
     }
+};
+
+class DoubleNode : public Expr {
+    
+    
 };
 
 class BiOperation : public Expr {
     char op_;
     Expr* left_;
     Expr* right_;
-
+    double result;
 public:
     BiOperation(char op, Expr* l, Expr* r)
         : op_(op), left_(l), right_(r) {}
@@ -39,15 +44,36 @@ public:
     Expr* left() { return left_; }
     Expr* right() { return right_; }
     char op() { return op_; }
+    double res() { return result; }
 
-    int accept(Visitor* v) override {
-        return v->visitBiOperation(this);
+    void accept(Visitor* v) override {
+         result = v->visitBiOperation(this);
     }
+};
+
+class WhileNode : public Expr {
+
+};
+
+class SemicolonNode : public Expr {
+
+};
+
+class Variable : public Expr {
+
+};
+
+class Assignment : public Expr {
+
+};
+
+class Condition : public Expr {
+
 };
 
 class CalcVisitor : public Visitor {
 public:
-    int visitNumber(Number* num) override {
+    int visitNumber(IntegerNode* num) override {
         return num->getVal();
     }
 
@@ -69,7 +95,7 @@ public:
 
 class PrintVisitor : public Visitor {
 public:
-    int visitNumber(Number* num) override {
+    int visitNumber(IntegerNode* num) override {
         std::cout << num->getVal();
         return 0;
     }
@@ -86,7 +112,7 @@ public:
 
 class PrintPostfixVisitor : public Visitor {
 public:
-    int visitNumber(Number* num) override {
+    int visitNumber(IntegerNode* num) override {
         std::cout << num->getVal();
         return 0;
     }

@@ -30,7 +30,7 @@ MINUS      : '-' ;
 MULTIPLY   : '*' ;
 DEVIDE     : '/' ;
 SEMICOLON  : ';' ;
-EQUALS     : '=' ;
+EQUALS     : '==' ;
 WHILE      : 'while' ;
 DO         : 'do' ;
 END        : 'end' ;
