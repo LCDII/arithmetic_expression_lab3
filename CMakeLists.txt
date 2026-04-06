@@ -41,10 +41,10 @@ file(MAKE_DIRECTORY ${GENERATED_DIR})
 #Генерация parser автоматически
 add_custom_command(
     OUTPUT
-        ${GENERATED_DIR}/PolynomialLexer.cpp
-        ${GENERATED_DIR}/PolynomialParser.cpp
-        ${GENERATED_DIR}/PolynomialBaseVisitor.cpp
-        ${GENERATED_DIR}/PolynomialVisitor.cpp
+        ${GENERATED_DIR}/PascalLexer.cpp
+        ${GENERATED_DIR}/PascalParser.cpp
+        ${GENERATED_DIR}/PascalBaseVisitor.cpp
+        ${GENERATED_DIR}/PascalVisitor.cpp
     COMMAND java -jar ${ANTLR_JAR}
             -Dlanguage=Cpp
             -visitor
@@ -55,10 +55,10 @@ add_custom_command(
 )#создание парсера очень удобно всек сам распокует и засунет
 
 set(ANTLR_SRCS
-    ${GENERATED_DIR}/PolynomialLexer.cpp
-    ${GENERATED_DIR}/PolynomialParser.cpp
-    ${GENERATED_DIR}/PolynomialBaseVisitor.cpp
-    ${GENERATED_DIR}/PolynomialVisitor.cpp
+    ${GENERATED_DIR}/PascalLexer.cpp
+    ${GENERATED_DIR}/PascalParser.cpp
+    ${GENERATED_DIR}/PascalBaseVisitor.cpp
+    ${GENERATED_DIR}/PascalVisitor.cpp
 )
 
 #GoogleTest 

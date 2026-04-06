@@ -1,36 +1,47 @@
-grammar Polynomial;
+grammar Pascal;
 
+// ---------- PARSER RULES ----------
+program : statement* EOF ;
 
-poly
-    : term (('+'|'-') term)* EOF
-    ;
+statement : assignment SEMICOLON
+          | whileLoop SEMICOLON
+          | expression SEMICOLON
+          ;
 
-term
-    : coefficient? monomial?
-    ;
+assignment : VARIABLE '=' expression ;
 
-coefficient
-    : NUMBER
-    | INTEGER
-    ;
+whileLoop : WHILE '(' condition ')' DO statement* END ;
 
+condition : expression ( (LESS | GREATER | EQUALS | LESS_EQ | GREATER_EQ | NOT_EQ) expression )? ;
 
-monomial
-    : factor+
-    ;
+expression : term ((PLUS | MINUS) term)* ;
 
+term : factor ((MULTIPLY | DEVIDE) factor)* ;
 
-factor
-    : VARIABLE (POW exponent)?
-    ;
+factor : INTEGER
+       | DOUBLE
+       | VARIABLE
+       | '(' expression ')'
+       ;
 
-exponent
-    : INTEGER
-    ;
+// ---------- TOKENS ----------
+PLUS       : '+' ;
+MINUS      : '-' ;
+MULTIPLY   : '*' ;
+DEVIDE     : '/' ;
+SEMICOLON  : ';' ;
+EQUALS     : '=' ;
+WHILE      : 'while' ;
+DO         : 'do' ;
+END        : 'end' ;
+LESS       : '<' ;
+GREATER    : '>' ;
+LESS_EQ    : '<=' ;
+GREATER_EQ : '>=' ;
+NOT_EQ     : '!=' | '<>' ;
 
+VARIABLE   : [a-zA-Z_][a-zA-Z0-9_]* ;
+DOUBLE     : [0-9]+ '.' [0-9]+ ;
+INTEGER    : [0-9]+ ;
 
-INTEGER  : [+-]? [0-9]+ ;
-NUMBER   : [+-]? [0-9]+ ('.' [0-9]+)? ;
-VARIABLE : [xyz] ;
-POW      : '^' ;
-WS       : [ \t\r\n]+ -> skip ;
+WS         : [ \t\r\n]+ -> skip ;
