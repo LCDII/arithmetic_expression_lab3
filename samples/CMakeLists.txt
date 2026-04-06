@@ -1,8 +1,16 @@
+
 set(target sample)
 
-file(GLOB hdrs "*.h")
-file(GLOB srcs "*.cpp")
+file(GLOB SAMPLE_SRCS "*.cpp")
 
-add_executable(${target} ${srcs} ${hdrs} )
+add_executable(${target} ${SAMPLE_SRCS})
 
-target_link_libraries(${target} ${LIBRARY})
+target_include_directories(${target} PRIVATE
+    ${INCLUDE}
+)
+
+target_link_libraries(${target} PRIVATE
+    ${LIBRARY}
+)
+
+install(TARGETS sample RUNTIME DESTINATION bin)
